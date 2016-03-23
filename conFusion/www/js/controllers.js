@@ -169,7 +169,7 @@ angular.module('conFusion.controllers', [])
     };
         }])
 
-.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', function ($scope, $stateParams, menuFactory, baseURL) {
+.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicPopover', '$timeout', function ($scope, $stateParams, menuFactory, favoriteFactory, baseURL, $ionicPopover, $timeout) {
     $scope.baseURL = baseURL;
 
     $scope.dish = {};
@@ -189,6 +189,41 @@ angular.module('conFusion.controllers', [])
             }
         );
 
+    $scope.popover = $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+        scope: $scope
+    });
+
+    // .fromTemplateUrl() 方法
+    $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+        scope: $scope
+    }).then(function (popover) {
+        $scope.popover = popover;
+    });
+
+
+    $scope.openPopover = function ($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function () {
+        $scope.popover.hide();
+    };
+    // 清除浮动框
+    $scope.$on('$destroy', function () {
+        $scope.popover.remove();
+    });
+    // 在隐藏浮动框后执行
+    $scope.$on('popover.hidden', function () {
+        // 执行代码
+    });
+    // 移除浮动框后执行
+    $scope.$on('popover.removed', function () {
+        // 执行代码
+    });
+
+    $scope.addFavorite = function () {
+        console.log("index is " + $scope.dish.id);
+        favoriteFactory.addToFavorites($scope.dish.id);
+    };
 
         }])
 
