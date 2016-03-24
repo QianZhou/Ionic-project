@@ -41,6 +41,7 @@ angular.module('conFusion.controllers', [])
     };
 
 
+    $scope.reservation = {};
     // Create the reserve modal that we will use later
     $ionicModal.fromTemplateUrl('templates/reserve.html', {
         scope: $scope
@@ -169,7 +170,7 @@ angular.module('conFusion.controllers', [])
     };
         }])
 
-.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicPopover', '$timeout', function ($scope, $stateParams, menuFactory, favoriteFactory, baseURL, $ionicPopover, $timeout) {
+.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicPopover', '$timeout', "$ionicModal", function ($scope, $stateParams, menuFactory, favoriteFactory, baseURL, $ionicPopover, $timeout, $ionicModal) {
     $scope.baseURL = baseURL;
 
     $scope.dish = {};
@@ -225,9 +226,6 @@ angular.module('conFusion.controllers', [])
         favoriteFactory.addToFavorites($scope.dish.id);
     };
 
-        }])
-
-.controller('DishCommentController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
 
     $scope.mycomment = {
         rating: 5,
@@ -235,18 +233,34 @@ angular.module('conFusion.controllers', [])
         author: "",
         date: ""
     };
+    $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+        scope: $scope
+    }).then(function (modal) {
+        $scope.commentform = modal;
+    });
 
-    $scope.submitComment = function () {
+    // Triggered in the reserve modal to close it
+    $scope.closeComment = function () {
+        $scope.commentform.hide();
+    };
+
+    // Open the reserve modal
+    $scope.comment = function () {
+        $scope.commentform.show();
+    };
+
+    // Perform the reserve action when the user submits the reserve form
+    $scope.doComment = function () {
+        console.log('Doing comment', $scope.mycomment);
 
         $scope.mycomment.date = new Date().toISOString();
-        console.log($scope.mycomment);
+        // Simulate a reservation delay. Remove this and replace with your reservation
+        // code if using a server system
 
         $scope.dish.comments.push($scope.mycomment);
         menuFactory.getDishes().update({
             id: $scope.dish.id
         }, $scope.dish);
-
-        $scope.commentForm.$setPristine();
 
         $scope.mycomment = {
             rating: 5,
@@ -254,8 +268,19 @@ angular.module('conFusion.controllers', [])
             author: "",
             date: ""
         };
-    }
-        }])
+
+        $timeout(function () {
+            $scope.closeComment();
+        }, 1000);
+
+
+    };
+
+}])
+
+.controller('DishCommentController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
+
+    }])
 
 // implement the IndexController and About Controller here
 

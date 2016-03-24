@@ -100,6 +100,16 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         }
     })
 
+    .state('app.dish-comment', {
+        url: '/dish-comment',
+        views: {
+            'mainContent': {
+                templateUrl: 'templates/dish-comment.html',
+                controller: 'DishDetailController'
+            }
+        }
+    })
+
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
 
