@@ -222,6 +222,7 @@ angular.module('conFusion.controllers', [])
     });
 
     $scope.addFavorite = function () {
+        $scope.closePopover();
         console.log("index is " + $scope.dish.id);
         favoriteFactory.addToFavorites($scope.dish.id);
     };
@@ -251,6 +252,7 @@ angular.module('conFusion.controllers', [])
 
     // Perform the reserve action when the user submits the reserve form
     $scope.doComment = function () {
+        $scope.closePopover();
         console.log('Doing comment', $scope.mycomment);
 
         $scope.mycomment.date = new Date().toISOString();
